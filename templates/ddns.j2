@@ -1,0 +1,52 @@
+#!/bin/bash
+{{ ansible_managed | comment }}
+
+
+SECRET="{{ ddns_secret }}"
+WAN="{{ ddns_wan }}"
+BASENAME="BaseDebian"
+HOSTNAME=`hostname`
+ADDRESS="XXX"
+
+while [[ $# -gt 0 ]]
+do
+	key="$1"
+	case $key in
+		-i|--interface)
+			WAN="$2"
+			shift
+			shift
+			;;
+		-a|--address)
+			ADDRESS="$2"
+			shift
+			shift
+			;;
+		-s|--secret)
+			SECRET="$2"
+			shift
+			shift
+			;;
+		-f)
+			FORCE=YES
+			shift
+			;;
+		-n|--hostname)
+			HOSTNAME=$2
+			shift
+			shift
+			;;
+	esac
+done
+
+if [ "$ADDRESS" == "XXX" ]
+then
+	ADDRESS="`ip -f inet addr show $WAN| sed -En -e 's/.*inet ([0-9.]+).*/\1/p'`"
+fi
+
+if [ "$FORCE" == YES ] || [ "`hostname`" != "$HOSTNAME" ]
+then
+	curl "http://ddns.mmsone.lan:8080/update?secret=$SECRET&domain=$HOSTNAME&addr=$ADDRESS"
+else
+	curl "http://ddns.mmsone.lan:8080/update?secret=$SECRET&domain="`hostname`"&addr=$ADDRESS"
+fi

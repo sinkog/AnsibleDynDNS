@@ -1,0 +1,11 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description=DDNS
+
+[Timer]
+OnUnitActive=120s
+OnBootSec=120s
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,4 @@
+---
+# tasks file for ddns
+- name: Include distribution specific variables
+  include_tasks: "{{ ddns_type }}.yml"

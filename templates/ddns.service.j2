@@ -1,0 +1,8 @@
+{{ ansible_managed | comment }}
+
+[Unit]
+Description= DDNS job
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /sbin/ddns.sh

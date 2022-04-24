@@ -1,0 +1,39 @@
+- name: "install depend packaget"
+  apt:
+    name: 'curl'
+    state: 'present'
+  become: true
+
+- name: "Install ddns bash script"
+  template:
+    src: templates/ddns.j2
+    dest: /sbin/ddns.sh
+    mode: '0755'
+  become: true
+
+- name: "Install ddns service Install"
+  template:
+    src: templates/ddns.service.j2
+    dest: /etc/systemd/system/ddns.service
+    mode: '0600'
+  become: true
+
+- name: "Install ddns Timer Install"
+  template:
+    src: templates/ddns.timer.j2
+    dest: /etc/systemd/system/ddns.timer
+    mode: '0600'
+  become: true
+
+- name: daemon reload
+  systemd:
+    daemon_reload: yes
+
+- name: "ddns timer enable"
+  systemd:
+    state: started
+    name: ddns.timer
+    enabled: yes
+
+- name: "run ddns"
+  ansible.builtin.shell: /sbin/ddns.sh

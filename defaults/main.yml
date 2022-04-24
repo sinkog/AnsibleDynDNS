@@ -1,0 +1,5 @@
+---
+# defaults file for ddns
+ddns_type: "client"
+ddns_secret: "lDJp9b1WFgYxoLhW8isKntpOaRd4tYPFjF0lZePV"
+ddns_wan: "ens18"
